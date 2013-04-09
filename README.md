@@ -59,7 +59,7 @@ For iOS & Android all is native & done automatically.
 
 For c++ & other PIN base authorization targets when the "_askPin" method is called you must call the method verifiy with the user pin:
 
-<pre><code>t.verifiy( "123456")</code>/<pre>
+<pre><code>t.verifiy( "123456")</code></pre>
 
 Usage
 -----
