@@ -40,18 +40,15 @@ Login
 
 Initiliazing :
 
-<code><code>
+<pre><code>
 var 	t = new HypTwitter( );
-
-	t.consumerKey= "xxxxxx";
-	
+	t.consumerKey= "xxxxxx";	
 	t.consumerSecret= "xxxxx";
 </code></pre>
 
 For developement mode you can defined your token & secret key:
 <pre><code>
-	t.token = ""; //Optional Developer token
-	
+	t.token = ""; //Optional Developer token	
 	t.tokenSecret = "";//Optional for developer
 </code></pre>
 
