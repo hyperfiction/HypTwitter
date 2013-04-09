@@ -1,0 +1,9 @@
+CA GENERATION
+=============
+The caffeine-hx certificate authority is a 512 bit rsa key
+
+openssl genrsa -3 -out ca.key 512
+openssl req -new -x509 -nodes -sha1 -days 1825 -key ca.key > ca.cert
+
+This generates a textfile of the ca cert
+openssl x509 -noout -fingerprint -text < ca.cert > ca.info

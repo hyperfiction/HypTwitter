@@ -1,0 +1,32 @@
+-cp ../../
+-js test.js
+-main HashTest
+-debug
+-D FIREBUG
+
+--next
+
+-cp ../../
+-neko test.n
+-main HashTest
+-debug
+
+--next
+
+-cp ../../
+-main HashTest
+-swf-version 8
+-swf test8.swf
+-debug
+-D FIREBUG
+
+--next
+
+-cp ../../
+-main HashTest
+-swf-version 9
+-swf test9.swf
+-debug
+-D FIREBUG
+
+

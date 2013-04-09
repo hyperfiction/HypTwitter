@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+
+	<classpath name="src" />
+	<classpath name="libs" />
+
+	<!-- -->
+		<echo value="---------------------------------------------------------------------------------"/>
+		<echo value="  /!\ [HypTwitter]"/>
+
+	<!-- Android -->
+		<java path="project/android" if="android"/>
+		<ndll name="HypTwitter" 	 if="android"/>
+
+		<echo value="	Don't forget to add the new Intent filter & data in to yours Manifest" if="android"/>
+		<echo value="	& add the following line to your build.nmml :" if="android"/>
+		<echo value='	<template path="[YOUR BIN FOLDER]/android/bin/MainActivity.java" rename="src/[CLASS_PATH]/MainActivity.java"/>' if="android"/>
+
+		<template 	path="/templates/android/MainActivity.java"
+					rename="MainActivityTwitter.java"
+					if="android" />
+
+
+
+	<!-- iOS -->
+		<ndll name="HypTwitter" 				if="ios"/>
+		<dependency name="Accounts.framework"	if="ios"/>
+		<dependency name="Twitter.framework"	if="ios"/>
+
+	<!-- -->
+		<echo value="---------------------------------------------------------------------------------"/>
+
+</project>

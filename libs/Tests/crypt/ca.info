@@ -1,0 +1,37 @@
+SHA1 Fingerprint=10:D8:62:E0:35:CF:4E:EC:C3:11:67:30:FD:85:FE:5F:AB:B9:E5:69
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            d7:8d:be:12:d0:6d:45:82
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=AU, ST=Some-State, L=My City, O=Caffeine-hx, CN=mail.me/emailAddress=me@no.domain
+        Validity
+            Not Before: Mar  6 09:32:14 2008 GMT
+            Not After : Mar  5 09:32:14 2013 GMT
+        Subject: C=AU, ST=Some-State, L=My City, O=Caffeine-hx, CN=mail.me/emailAddress=me@no.domain
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (512 bit)
+                Modulus (512 bit):
+                    00:de:91:c1:81:75:9c:89:99:37:06:bd:2a:86:bb:
+                    77:79:62:b8:87:8e:f8:70:2b:c6:6c:44:37:7a:78:
+                    1d:48:38:91:b0:de:a1:bd:42:c9:51:34:c5:e3:ee:
+                    0e:db:7e:3d:99:55:b6:b4:de:29:42:50:3f:6e:18:
+                    9c:44:e7:08:cf
+                Exponent: 3 (0x3)
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                D4:98:C9:F3:CC:CD:60:0E:80:5F:FF:86:8C:59:E9:39:BB:12:F2:14
+            X509v3 Authority Key Identifier: 
+                keyid:D4:98:C9:F3:CC:CD:60:0E:80:5F:FF:86:8C:59:E9:39:BB:12:F2:14
+                DirName:/C=AU/ST=Some-State/L=My City/O=Caffeine-hx/CN=mail.me/emailAddress=me@no.domain
+                serial:D7:8D:BE:12:D0:6D:45:82
+
+            X509v3 Basic Constraints: 
+                CA:TRUE
+    Signature Algorithm: sha1WithRSAEncryption
+        8e:ea:1b:73:fe:79:00:f4:da:4f:03:79:8a:04:57:0a:fc:ef:
+        7f:c7:68:76:cb:73:c2:d9:5c:04:20:77:92:3d:08:3e:25:50:
+        74:f1:5a:b5:82:fd:44:20:d0:ce:db:91:28:42:77:ba:7f:8f:
+        4f:81:cf:4f:6a:46:80:26:5e:c7

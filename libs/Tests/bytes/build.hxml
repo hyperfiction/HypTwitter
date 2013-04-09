@@ -1,0 +1,29 @@
+-cp ../../
+-debug
+-neko test.n
+-main BytesTest
+
+--next
+
+-cp ../../
+-debug
+-js test.js
+-main BytesTest
+
+--next
+
+-cp ../../
+-debug
+-swf test9.swf
+-swf-version 9
+-main BytesTest
+-swf-header 1280:800:20:FFFFFF
+
+--next
+
+-cp ../../
+-debug
+-swf test8.swf
+-swf-version 8
+-main BytesTest
+-swf-header 1280:800:20:FFFFFF

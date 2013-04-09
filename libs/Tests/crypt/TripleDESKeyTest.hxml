@@ -1,0 +1,32 @@
+-cp src
+-cp ../../
+-neko test.n
+-main TripleDESKeyTest
+-debug
+
+--next
+-cp src
+-cp ../../
+-js test.js
+-main TripleDESKeyTest
+-debug
+-D FIREBUG
+
+--next
+-cp src
+-cp ../../
+-swf test9.swf
+-swf-version 9
+-main TripleDESKeyTest
+-debug
+-D FIREBUG
+
+--next
+-cp src
+-cp ../../
+-swf test8.swf
+-swf-version 8
+-main TripleDESKeyTest
+-debug
+-D FIREBUG
+
