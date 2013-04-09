@@ -29,7 +29,7 @@ Android
 For android you need to merge you MainActivity.java if you are using another extension who is customizing the MainActivity ( by exammple HypFacebook )
 
 If you need to use HypTwitter only just add in your nmml project file :
-<pre><code><template path="[bin-folder]/android/bin/MainActivityTwitter.java" rename="src/fr/hyperfiction/test/MainActivity.java"/></code></pre>
+template path="[bin-folder]/android/bin/MainActivityTwitter.java" rename="src/fr/hyperfiction/test/MainActivity.java"/>
 
 Recompiling
 -----------
@@ -42,13 +42,16 @@ Initiliazing :
 
 <code><code>
 var 	t = new HypTwitter( );
+
 	t.consumerKey= "xxxxxx";
+	
 	t.consumerSecret= "xxxxx";
 </code></pre>
 
 For developement mode you can defined your token & secret key:
 <pre><code>
 	t.token = ""; //Optional Developer token
+	
 	t.tokenSecret = "";//Optional for developer
 </code></pre>
 
