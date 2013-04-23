@@ -2,10 +2,10 @@
 #define Device
 
 
-namespace Hyperfiction{
+namespace hyptwitter{
 
 	void connect( const char *sConsumerKey , const char *sAuthParam );
-	
+
 }
 
 #endif

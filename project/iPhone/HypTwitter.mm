@@ -5,14 +5,14 @@
 
 #define TWITTER_URL @"https://api.twitter.com/oauth/access_token"
 
-namespace Hyperfiction{
+namespace hyptwitter{
 
 	ACAccountStore *accountStore;
 
 	//
 		typedef void( *FunctionType)( );
 		extern "C"{
-			void dispatch_event( const char *sType , const char *sArg );
+			void hyptwitter_dispatch_event( const char *sType , const char *sArg );
 		}
 
 	//
@@ -30,21 +30,21 @@ namespace Hyperfiction{
 		     NSDictionary *step2Params = [[NSMutableDictionary alloc] init];
 
 		    [step2Params setValue:nsConsumerKey forKey:@"x_reverse_auth_target"];
-		    [step2Params setValue:nsAuthParam 	forKey:@"x_reverse_auth_parameters"];            
-		     
+		    [step2Params setValue:nsAuthParam 	forKey:@"x_reverse_auth_parameters"];
+
 
 		    NSURL *url2 = [NSURL URLWithString:TWITTER_URL];
 
 		    SLRequest *stepTwoRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST URL:url2 parameters:step2Params];
 
-		     
+
 			accountStore = [[ACAccountStore alloc] init];
 			ACAccountType *twitterType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
 			[accountStore requestAccessToAccountsWithType:twitterType withCompletionHandler:^(BOOL granted, NSError *error) {
 
 		    	if (!granted) {
 
-		    		dispatch_event( "ERROR" ,"not granted");
+				hyptwitter_dispatch_event( "ERROR" ,"not granted");
 
 		    	} else {
 
@@ -56,24 +56,24 @@ namespace Hyperfiction{
 		    		// to use with your application.  DO NOT FORGET THIS STEP.
 		    		[stepTwoRequest setAccount:[accounts objectAtIndex:0]];
 
-		     
+
 
 		    		// execute the request
 		    		[stepTwoRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
 
 
-		    			if ([urlResponse statusCode] == 200) {
-		    				NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-		    				NSLog(@"The user's info for your server:\n%@", responseStr);
-		    				dispatch_event( "OK" ,[ responseStr UTF8String ]);
+					if ([urlResponse statusCode] == 200) {
+						NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+						NSLog(@"The user's info for your server:\n%@", responseStr);
+						hyptwitter_dispatch_event( "OK" ,[ responseStr UTF8String ]);
 
-		    			}else{
-		    				NSLog(@"Call failed");
-		    				dispatch_event( "ERROR" , [[error localizedDescription] UTF8String]);		    				
-		    			}
-		    		}];
+					}else{
+						NSLog(@"Call failed");
+						hyptwitter_dispatch_event( "ERROR" , [[error localizedDescription] UTF8String]);
+					}
+				}];
 
-		    	} 
+		    	}
 
 		    }];
 		}
