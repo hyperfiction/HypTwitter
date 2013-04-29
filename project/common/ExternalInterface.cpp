@@ -53,7 +53,7 @@ using namespace hyptwitter;
 																			){
 				ALOG("Java_fr_hyperfiction_HypTwitter_onNewIntent" );
 
-				const char *sIntent_url	= env->GetStringUTFChars( jsIntent_url , false );
+				const char *sIntent_url	= env->GetStringUTFChars( jsIntent_url , 0 );
 
 				val_call1(
 					eval_callback_intent->get( ),

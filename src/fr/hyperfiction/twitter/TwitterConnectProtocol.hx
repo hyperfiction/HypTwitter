@@ -24,11 +24,11 @@ class TwitterConnectProtocol{
 	private static inline var AUTHENTIFICATE : String = "https://api.twitter.com/oauth/authenticate?oauth_token=";
 
 	// -------o constructor
-		
+
 		/**
 		* constructor
 		*
-		* @param	
+		* @param
 		* @return	void
 		*/
 		public function new( onConnected : Void->Void , onError : String->Void , ?fAskPin : Void->Void ) {
@@ -38,37 +38,37 @@ class TwitterConnectProtocol{
 			_fOnError	= onError;
 			_hTemp		= new Hash<String>( );
 		}
-	
+
 	// -------o public
-				
+
 		/**
 		* Perform the three step authentification protocol
-		* 
+		*
 		* @public
 		* @return	void
 		*/
 		public function connect( oTwitter_instance : HypTwitter ) : Void {
 			trace("connect");
 			_oTwitter_instance = oTwitter_instance;
-			_phase1( );	
-		}		
+			_phase1( );
+		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @public
 		* @return	void
 		*/
 		public function verify( sPin : String ) : Void {
 			trace("verifiy ::: "+sPin);
 			_phase3( _sAuthToken , sPin );
-		}	
+		}
 
 	// -------o protected
-		
+
 		/**
 		* Phase 1 of the Twitter connect protocol
-		* 
+		*
 		* @private
 		* @return	void
 		*/
@@ -78,7 +78,7 @@ class TwitterConnectProtocol{
 			_oTwitter_instance.onDatas = _onPhase1_response;
 
 			#if ( mobile )
-				
+
 				#if android
 				_oTwitter_instance.call( REQUEST_TOKEN( "app://twitter" ) );
 				#end
@@ -97,21 +97,21 @@ class TwitterConnectProtocol{
 
 		/**
 		* Phase 1 response
-		* 
+		*
 		* @private
 		* @return	void
 		*/
 		private function _onPhase1_response( s : String ) : Void{
 			trace("_onPhase1_response ::: "+s);
-			
+
 			//
 				_hTemp = URLVarsParser.parse( s , _hTemp );
-							
+
 			//
 				var bConfirmed			= _hTemp.get( "oauth_callback_confirmed" ) == "true";
 				var sAuth_token_secret	= _hTemp.get( "oauth_token_secret" );
 				_sAuthToken				= _hTemp.get( "oauth_token" );
-				
+
 				trace("bConfirmed         ::: "+bConfirmed);
 				trace("sAuth_token_secret ::: "+sAuth_token_secret);
 				trace("_sAuthToken        ::: "+_sAuthToken);
@@ -121,11 +121,11 @@ class TwitterConnectProtocol{
 
 			//
 				_phase2( _sAuthToken );
-		}	
+		}
 
 		/**
 		* Phase 2 launch
-		* 
+		*
 		* @private
 		* @return	void
 		*/
@@ -138,7 +138,7 @@ class TwitterConnectProtocol{
 				HypTwitter_set_callback( _onIntent );
 
 			#else
-				
+
 				//For non-mobile device we ask the PIN
 				nme.Lib.getURL( new nme.net.URLRequest( AUTHENTIFICATE+sAuth_token ) );
 				_fAskPin( );
@@ -147,8 +147,8 @@ class TwitterConnectProtocol{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -170,8 +170,8 @@ class TwitterConnectProtocol{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -181,8 +181,8 @@ class TwitterConnectProtocol{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -193,8 +193,8 @@ class TwitterConnectProtocol{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -207,14 +207,14 @@ class TwitterConnectProtocol{
 				_oTwitter_instance.token		= res.get( "oauth_token" );
 				_oTwitter_instance.tokenSecret	= res.get( "oauth_token_secret" );
 				trace( res );
-				
+
 			//
 				trace( "tokenSecret	::: " + _oTwitter_instance.tokenSecret );
 				trace( "token 		::: " + _oTwitter_instance.token );
 
 			//
 				#if android
-				var bOk	= Reflect.field( vars , "oauth_callback_confirmed" );
+				var bOk	= Reflect.field( res , "oauth_callback_confirmed" );
 				trace( "bOk ::: " + bOk );
 				#end
 		}
@@ -229,8 +229,8 @@ class TwitterConnectProtocol{
 		private static inline var CONNECTION_ERROR	: String = "ERROR";
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -240,8 +240,8 @@ class TwitterConnectProtocol{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -251,7 +251,7 @@ class TwitterConnectProtocol{
 
 		/**
 		* Calling the IOS reverse auth mode
-		* 
+		*
 		* @private
 		* @return	void
 		*/
@@ -259,11 +259,11 @@ class TwitterConnectProtocol{
 			trace("_onPhase1_iPhone_response ::: "+s);
 				HypTwitter_set_reverse_auth_callback( _onIOS_callback );
 				HypTwitter_connect( _oTwitter_instance.consumerKey , s );
-		}	
+		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -292,19 +292,19 @@ class TwitterConnectProtocol{
 		#if android
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @public
 		* @return	void
 		*/
 		@CPP("HypTwitter")
 		public function HypTwitter_set_callback( s : String->Void ) : Void {
-						
+
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -314,5 +314,5 @@ class TwitterConnectProtocol{
 		}
 
 		#end
-	
+
 }
