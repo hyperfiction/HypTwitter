@@ -49,7 +49,7 @@ class Cipher {
 	var buf : Bytes;
 	var bufsize : Int;
 	var ptr : Int;
-	
+
 
 	var modeUpdate : Bytes->Output->Int;
 	var modeFinal : Bytes->Output->Int;
@@ -138,7 +138,7 @@ class Cipher {
 				// flush out buf if it is full and we have more incoming
 				if(ptr == blockSize) {
 					var written = modeUpdate(buf, out);
-					Assert.isTrue(written == blockSize);
+					\\Assert.isTrue(written == blockSize);
 					ptr = 0;
 				}
 				var num = Std.int(Math.min(bufsize-ptr, inputLen));
@@ -147,13 +147,13 @@ class Cipher {
 				}
 				// fill up the buf again
 				for(i in 0...num) {
-					Assert.isTrue(ptr + i < bufsize);
+					\\Assert.isTrue(ptr + i < bufsize);
 					buf.set(i+ptr, input.get(i + inputOffset));
 				}
 				inputLen -= num;
 				inputOffset += num;
 				ptr += num;
-				Assert.isTrue(ptr <= bufsize);
+				\\Assert.isTrue(ptr <= bufsize);
 			}
 		}
 		return rv;

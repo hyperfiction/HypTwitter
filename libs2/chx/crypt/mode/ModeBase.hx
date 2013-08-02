@@ -41,9 +41,9 @@ class ModeBase implements IMode {
 	public var cipher(default, setCipher) : IBlockCipher;
 	public var padding(default,setPadding) : IPad;
 	public var blockSize(getBlockSize,never) : Int;
-	
+
 	var params : CipherParams;
-	
+
 	public function new() {
 		padding = new PadPkcs5();
 	}
@@ -56,7 +56,7 @@ class ModeBase implements IMode {
 		throw new chx.lang.FatalException("not implemented");
 		return 0;
 	}
-	
+
 	public function updateDecrypt( b : Bytes, out : Output ) : Int {
 		throw new chx.lang.FatalException("not implemented");
 		return 0;
@@ -88,7 +88,7 @@ class ModeBase implements IMode {
 	public function finalEncrypt( b : Bytes, out : Output) : Int {
 		var n = blockSize;
 		var buf = padding.pad(b);
-		Assert.isEqual(0, buf.length % n);
+		\\Assert.isEqual(0, buf.length % n);
 
 		var ptr = 0;
 		var rv = 0;
@@ -104,7 +104,7 @@ class ModeBase implements IMode {
 
 	public function finalDecrypt( b : Bytes, out : Output ) : Int {
 		var n = blockSize;
-		Assert.isTrue(b.length % n == 0);
+		\\Assert.isTrue(b.length % n == 0);
 		var bo = new BytesOutput();
 		var ptr = 0;
 		var rv = 0;

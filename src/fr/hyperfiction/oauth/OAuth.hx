@@ -2,14 +2,15 @@ package fr.hyperfiction.oauth;
 
 import chx.hash.HMAC;
 import chx.hash.Sha1;
-import haxe.BaseCode;
+import haxe.crypto.BaseCode;
 import haxe.Http;
-import nme.events.Event;
-import nme.net.URLLoader;
-import nme.net.URLRequest;
-import nme.net.URLVariables;
-import nme.net.URLRequestHeader;
-import nme.net.URLRequestMethod;
+import haxe.io.Bytes;
+import flash.events.Event;
+import flash.net.URLLoader;
+import flash.net.URLRequest;
+import flash.net.URLVariables;
+import flash.net.URLRequestHeader;
+import flash.net.URLRequestMethod;
 
 /**
  * ...
@@ -18,25 +19,25 @@ import nme.net.URLRequestMethod;
 
 class OAuth{
 
-	public var consumerKey		( default , _setConsumer_key ) : String;
+	public var consumerKey		( default , set ) : String;
 	public var consumerSecret	( default , default ) : String;
 	public var baseURL			( default , default ) : String;
 	public var token			( default , default ) : String;
 	public var tokenSecret		( default , default ) : String;
 
 	private var _encoder	: HMAC;
-	private var _hParams	: Hash<String>;
+	private var _hParams	: Map<String,String>;
 	private var _loader		: URLLoader;
 	private var _oParams	: Params;
 
-	private static inline var NONCE_CHARS : Array<String> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+	private static var NONCE_CHARS : Array<String> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 	// -------o constructor
-		
+
 		/**
 		* constructor
 		*
-		* @param	
+		* @param
 		* @return	void
 		*/
 		public function new( ) {
@@ -44,34 +45,34 @@ class OAuth{
 			_encoder = new HMAC( new Sha1( ) );
 			_oParams = new Params( );
 		}
-	
+
 	// -------o public
-		
+
 	// -------o protected
-		
+
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
-		private function _getFormated_params_to_urlvars( hParams : Hash<String> ) : URLVariables{
+		private function _getFormated_params_to_urlvars( hParams : Map<String,String> ) : URLVariables{
 			var v = new URLVariables( );
 			for( k in hParams.keys( ) )
 				Reflect.setField( v , k , hParams.get( k ) );
-			
+
 			return v;
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
 		private function _requestAccessToken( ) : Void{
 
-			
+
 			var sURL = "https://api.twitter.com/1.1/statuses/update.json";
 
 			var req = _getSigned_request(GET,sURL );
@@ -81,26 +82,26 @@ class OAuth{
 				#if !display
 				r.requestHeaders = [ new URLRequestHeader("Authorization",req) ];
 				#end
-				r.method = nme.net.URLRequestMethod.POST;
+				r.method = flash.net.URLRequestMethod.POST;
 				//r.data = v;
 
 			var l = new URLLoader( );
 				l.addEventListener( Event.COMPLETE , function( e ){
 					trace( e.target.data );
 				} );
-				l.addEventListener( nme.events.IOErrorEvent.IO_ERROR, function( io ){
+				l.addEventListener( flash.events.IOErrorEvent.IO_ERROR, function( io ){
 					trace( io );
 				});
-				l.addEventListener( nme.events.SecurityErrorEvent.SECURITY_ERROR, function( s ){
+				l.addEventListener( flash.events.SecurityErrorEvent.SECURITY_ERROR, function( s ){
 					trace( s );
 				});
 				l.load( r );
-			
+
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -113,20 +114,18 @@ class OAuth{
 					aBase.push( { name:"oauth_signature_method"		,value:"HMAC-SHA1"});
 					aBase.push( { name:"oauth_consumer_key"			,value:consumerKey});
 					aBase.push( { name:"oauth_timestamp"			,value:_getTimestamp( )});
-					aBase.push( { name:"oauth_version"				,value:"1.0"});	
+					aBase.push( { name:"oauth_version"				,value:"1.0"});
 					if( token != null && token != "" )
-					aBase.push( { name:"oauth_token",value:token});			
+					aBase.push( { name:"oauth_token",value:token});
 					aBase.sort( _sort );
 
-			
-				
-				
+
 			//
 				if( aRequestParams != null )
 					for( p in aRequestParams.get( ) )
 						aBase.push( { name : p.name , value : p.value} );
 				aBase.sort( _sort );
-				
+
 
 			//
 				var a = aBase.slice( 0 , aBase.length );
@@ -134,11 +133,13 @@ class OAuth{
 			//
 				var sParams = "";
 				var iter = a.iterator( );
-				for( v in iter )
+				for( v in iter ){
+					trace( v.name+" = "+v.value);
 					sParams += uriEncode( v.name )+"="+uriEncode( v.value )+( iter.hasNext( ) ? "&" : "" );
+				}
 
-				
-				
+
+
 			//
 				var sParams_and_args = sParams.substr( 0 );
 				if( aBodyParams != null )
@@ -153,7 +154,7 @@ class OAuth{
 
 				//Params
 					sSign += uriEncode( sParams_and_args );
-				
+
 				#if debug
 				trace("OAUTH Signature : ");
 				trace( sSign );
@@ -161,7 +162,9 @@ class OAuth{
 
 			//Key
 				var sKey = uriEncode( consumerSecret ) + "&"+uriEncode( tokenSecret );
-				var hashed = _encoder.calculate( Bytes.ofString( sKey ) , Bytes.ofString( sSign ) );
+				trace("sKey ::: "+sKey);
+				var hashed : haxe.io.Bytes = _encoder.calculate( haxe.io.Bytes.ofString( sKey ) , haxe.io.Bytes.ofString( sSign ) );
+				trace( hashed.toString( ) );
 				var signature = encode( hashed );
 				trace( signature );
 
@@ -174,26 +177,26 @@ class OAuth{
 				var s = "OAuth ";
 				var i = 0;
 				for( v in aBase ) {
-					
+
 					//trace( v );
-					
+
 					if( i++ > 0 )
 						s += ", ";
 
 					s+= uriEncode( v.name ); //%encode key
 					s+= '="';
 					s+= uriEncode( v.value );
-					s+= '"';					
-					
+					s+= '"';
+
 				}
-			
+
 			return s;
-			
+
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -206,13 +209,13 @@ class OAuth{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
 		static public function uriEncode( s : String , ?b : Bool ) : String{
-			
+
 			var regex : EReg = ~/[a-zA-Z0-9_~\.\-]/;
 			var c;
 			var res = "";
@@ -236,8 +239,8 @@ class OAuth{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -245,39 +248,40 @@ class OAuth{
 			return Bytes.ofString( StringTools.urlEncode( consumerSecret ) + "&"+tokenSecret );
 		}
 
-	
+
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
 		private function _generateNonce_string( ) : String{
-			
+			return "kYjzVBB8Y0ZFabxSWbWovY3uYSQ2pTgmZeNu2VS4cg";
 			var res : String = "";
 			for( i in 0...20 )
 				res += NONCE_CHARS[ Std.int( Math.random( ) * NONCE_CHARS.length ) ];
-				
+
 			return res;
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
 		private function _getTimestamp( ) : String{
+			return "1318622958";
 			return Std.int( Date.now( ).getTime( ) / 1000 )+"";
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
-		private function _setConsumer_key( s : String ) : String{
+		private function set_consumerKey( s : String ) : String{
 			trace("_setConsumer_key ::: "+s);
 			return this.consumerKey = s;
 		}
@@ -288,18 +292,19 @@ class OAuth{
 		* @param bytes Buffer to encode
 		* @return Base64 encoded string
 		**/
-		inline private static function encode(bytes : Bytes) : String {
+		inline private static function encode(bytes : haxe.io.Bytes) : String {
 			var ext : String = switch (bytes.length % 3) {
 			case 1: "==";
 			case 2: "=";
 			case 0: "";
+			case _:"";
 			}
-			var enc = new BaseCode(Bytes.ofString(Constants.DIGITS_BASE64));
+			var enc = new BaseCode( haxe.io.Bytes.ofString(Constants.DIGITS_BASE64));
 			return enc.encodeBytes(bytes).toString() + ext;
 		}
 
 	// -------o misc
-	
+
 }
 
 
@@ -325,11 +330,11 @@ class Params{
 	private var _aParams : Array<Value>;
 
 	// -------o constructor
-		
+
 		/**
 		* constructor
 		*
-		* @param	
+		* @param
 		* @return	void
 		*/
 		public function new( ?name : String , ?value : String ) {
@@ -337,12 +342,12 @@ class Params{
 			if( name != null && value != null )
 				_aParams.push( { name: name , value : value} );
 		}
-	
+
 	// -------o public
-		
+
 		/**
-		* 
-		* 
+		*
+		*
 		* @public
 		* @return	void
 		*/
@@ -351,8 +356,8 @@ class Params{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @public
 		* @return	void
 		*/
@@ -361,13 +366,13 @@ class Params{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @public
 		* @return	void
 		*/
 		public function toString( ) : String {
-			
+
 			var res = "";
 			var iter = _aParams.iterator( );
 			for( val in iter )
@@ -379,13 +384,13 @@ class Params{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @public
 		* @return	void
 		*/
 		public function getVars( ?res : URLVariables ) : URLVariables {
-			
+
 			if( res == null )
 				res = new URLVariables( );
 
@@ -397,11 +402,11 @@ class Params{
 		}
 
 	// -------o protected
-	
-		
+
+
 
 	// -------o misc
-	
+
 }
 
 

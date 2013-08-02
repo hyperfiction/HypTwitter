@@ -71,7 +71,7 @@ class BigInteger {
 		if(BI_RM.length == 0)
 			throw("BI_RM not initialized");
 		#if (neko || useOpenSSL)
-			Assert.isNotNull(bi_new);
+			\\Assert.isNotNull(bi_new);
 			_hnd = bi_new();
 		#else
 			chunks = new Array<Int>();

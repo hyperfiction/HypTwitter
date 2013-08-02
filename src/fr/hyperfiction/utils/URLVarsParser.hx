@@ -27,10 +27,10 @@ class URLVarsParser{
 		* @public
 		* @return	void
 		*/
-		static public function parse( s : String , ?h : Hash<String> ) : Hash<String> {
+		static public function parse( s : String , ?h : Map<String,String> ) : Map<String,String> {
 			
 			if( h == null )
-				h = new Hash<String>( );
+				h = new Map<String,String>( );
 			else 
 				for( k in h.keys( ) )
 					h.remove( k );

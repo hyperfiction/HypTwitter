@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, The Caffeine-hx project contributors
+ * Copyright (c) 2008-2009, The Caffeine-hx project contributors
  * Original author : Russell Weir
  * Contributors:
  * All rights reserved.
@@ -25,60 +25,18 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * Haxe code platforms adapted from SHA1 Javascript implementation
- * adapted from code covered by the LGPL © 2002-2005 Chris Veness,
- * http://www.movable-type.co.uk/scripts/sha1.html
- *
- * Alternative BSD implementation: http://pajhome.org.uk/crypt/md5/sha1src.html
-*/
+package chx.lang;
 
-package chx.hash;
+class Exception {
+	public var message : String;
+	public var cause : Dynamic;
 
-import haxe.io.Bytes;
-import haxe.io.BytesBuffer;
-
-import BytesUtil;
-
-class Sha1 implements IHash {
-
-    public function new() {
+	public function new(?msg: String, ?cause : Dynamic) {
+		this.message = msg;
+		this.cause = cause;
 	}
 
-	public function dispose() : Void {
+	public function toString() {
+		return Type.getClassName(Type.getClass(this)) + "(" + if(message == null) "" else message  + ")";
 	}
-
-	public function toString() : String {
-		return "sha1";
-	}
-
-	public function calculate( msg:Bytes ) : Bytes {
-		return encode(msg);
-	}
-
-	public function calcHex( msg:Bytes ) : String {
-		return encode(msg).toHex();
-	}
-
-	public function getLengthBytes() : Int {
-		return 20;
-	}
-
-	public function getLengthBits() : Int {
-		return 160;
-	}
-
-	public function getBlockSizeBytes() : Int {
-		return 64;
-	}
-
-	public function getBlockSizeBits() : Int {
-		return 512;
-	}
-
-
-	public function encode(msg:Bytes) : Bytes {
-	    return Bytes.ofString(haxe.crypto.Sha1.encode( msg.readString(0,msg.length)));
-	}
-
 }

@@ -27,6 +27,8 @@
 
 package chx.hash;
 
+import haxe.io.Bytes;
+
 interface IHash {
 	/**
 		Returns the hex string hash value

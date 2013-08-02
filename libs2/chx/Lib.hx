@@ -54,9 +54,9 @@ class Lib {
 			return null;
 		#end
 	}
-	
+
 	/**
-	 * Tries to load a dynamic library, and always returns a valid function, 
+	 * Tries to load a dynamic library, and always returns a valid function,
 	 * but the function may throw if called.
 	 * @param	lib
 	 * @param	prim
@@ -141,7 +141,7 @@ class Lib {
 			trace(v);
 		#end
 	}
-	
+
 	/**
 	 * Returns a string referencing the data contains in bytes.
 	 * @param	b
@@ -204,7 +204,7 @@ class Lib {
 		#end
 	}
 
-	static var dll_init : Hash<Bool>;
+	static var dll_init : Map<String,Bool>;
 	/**
 	 * For platforms that require initialization of loaded libraries. This is required when
 	 * using ndlls generated with hxcpp for neko
@@ -213,7 +213,7 @@ class Lib {
 	 */
 	public static function initDll(libName:String, entryFunc : String = null) : Void {
 		if(dll_init == null)
-			dll_init = new Hash();
+			dll_init = new Map<String,Bool>();
 		if(dll_init.exists(libName))
 			return;
 		var init : Dynamic = null;
@@ -342,7 +342,7 @@ class Lib {
 	 * module, even if the module name was different. This can happen if you are unserializing
 	 * some data into mod_neko that was serialized on a different server using a different
 	 * file path.
-	 * 
+	 *
 	 * @param	s
 	 * @return
 	 */
@@ -353,48 +353,7 @@ class Lib {
 		});
 	}
 #end
-#if php
-	static function appendType(o : Dynamic, path : Array<String>, t : Dynamic) {
-		var name = path.shift();
-		if(path.length == 0)
-			untyped __php__("$o->$name = $t");
-		else {
-			var so = untyped __call__("isset", __php__("$o->$name")) ? __php__("$o->$name") : {};
-			appendType(so, path, t);
-			untyped __php__("$o->$name = $so");
-		}
-	}
-	
-	public static function extensionLoaded(name : String) {
-		return untyped __call__("extension_loaded", name);
-	}
 
-	public static function isCli() : Bool {
-		return untyped __php__("(0 == strncasecmp(PHP_SAPI, 'cli', 3))");
-	}
-
-	public static function printFile(file : String) {
-		return untyped __call__("fpassthru", __call__("fopen", file,  "r"));
-	}
-
-	public static inline function toPhpArray(a : Array<Dynamic>) : php.NativeArray {
-		return untyped __field__(a, '»a');
-	}
-
-	public static inline function toHaxeArray(a : php.NativeArray) : Array<Dynamic> {
-		return untyped __call__("new _hx_array", a);
-	}
-
-	public static function hashOfAssociativeArray<T>(arr : php.NativeArray) : Hash<T> {
-		var h = new Hash<T>();
-		untyped __php__("reset($arr); while(list($k, $v) = each($arr)) $h->set($k, $v)");
-		return h;
-	}
-	
-	public static function associativeArrayOfHash(hash : Hash<Dynamic>) : php.NativeArray {
-		return untyped hash.h;
-	}
-#end
 
 	/**
 	 * Returns an object containing all compiled packages and classes.

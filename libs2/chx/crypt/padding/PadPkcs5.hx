@@ -25,60 +25,44 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * Haxe code platforms adapted from SHA1 Javascript implementation
- * adapted from code covered by the LGPL © 2002-2005 Chris Veness,
- * http://www.movable-type.co.uk/scripts/sha1.html
- *
- * Alternative BSD implementation: http://pajhome.org.uk/crypt/md5/sha1src.html
-*/
+package chx.crypt.padding;
 
-package chx.hash;
+class PadPkcs5 extends PadBase, implements IPad {
 
-import haxe.io.Bytes;
-import haxe.io.BytesBuffer;
-
-import BytesUtil;
-
-class Sha1 implements IHash {
-
-    public function new() {
+	override public function calcNumBlocks(len : Int) : Int {
+		var chr : Int = blockSize - (len % blockSize);
+		\\Assert.isEqual(0, (len + chr) % blockSize);
+		return Math.floor((len + chr) / blockSize);
 	}
 
-	public function dispose() : Void {
+	override public function pad( s : Bytes ) : Bytes {
+		var sb = new BytesBuffer();
+		if(s.length > 0)
+			sb.add ( s );
+		var chr : Int = blockSize - (s.length % blockSize);
+		if(s.length == blockSize)
+			chr = blockSize;
+		for( i in 0...chr) {
+			sb.addByte( chr );
+		}
+		var rv = sb.getBytes();
+		return rv;
 	}
 
-	public function toString() : String {
-		return "sha1";
-	}
-
-	public function calculate( msg:Bytes ) : Bytes {
-		return encode(msg);
-	}
-
-	public function calcHex( msg:Bytes ) : String {
-		return encode(msg).toHex();
-	}
-
-	public function getLengthBytes() : Int {
-		return 20;
-	}
-
-	public function getLengthBits() : Int {
-		return 160;
-	}
-
-	public function getBlockSizeBytes() : Int {
-		return 64;
-	}
-
-	public function getBlockSizeBits() : Int {
-		return 512;
-	}
-
-
-	public function encode(msg:Bytes) : Bytes {
-	    return Bytes.ofString(haxe.crypto.Sha1.encode( msg.readString(0,msg.length)));
+	override public function unpad( s : Bytes ) : Bytes {
+		if( s.length % blockSize != 0 || s.length < blockSize)
+			throw "crypt.padpkcs5 unpad: buffer length "+s.length+" not multiple of block size " + blockSize;
+		var c : Int = s.get(s.length-1);
+		var i = c;
+		var pos = s.length - 1;
+		while(i > 0) {
+			var n = s.get(pos);
+			if (c != n)
+				throw "crypt.padpkcs5 unpad: invalid byte";
+			pos--;
+			i--;
+		}
+		return s.sub(0, s.length - c);
 	}
 
 }

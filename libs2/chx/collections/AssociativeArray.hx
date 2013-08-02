@@ -139,10 +139,10 @@ class AssociativeArray<T> {
 		a.set("horse", 12);
 		a.set("dog", 14);
 
-		Assert.isEqual(0, a.get(0));
-		Assert.isEqual(1, a.get(1));
-		Assert.isEqual(12, a.get("horse"));
-		Assert.isEqual(14, a.get("dog"));
+		\\Assert.isEqual(0, a.get(0));
+		\\Assert.isEqual(1, a.get(1));
+		\\Assert.isEqual(12, a.get("horse"));
+		\\Assert.isEqual(14, a.get("dog"));
 		var msg : String = "";
 		for(i in a)
 			msg += i + " ";
@@ -152,38 +152,38 @@ class AssociativeArray<T> {
 		a.set(2,2);
 		a.set(3,3);
 		a.set(4,4);
-		Assert.isEqual(5, a.getIntegerArrayLength());
-		Assert.isTrue(a.remove(3));
-		Assert.isEqual(4, a.getIntegerArrayLength());
+		\\Assert.isEqual(5, a.getIntegerArrayLength());
+		\\Assert.isTrue(a.remove(3));
+		\\Assert.isEqual(4, a.getIntegerArrayLength());
 		msg = "";
 		for(i in a)
 			msg += i + " ";
 		trace("The following line should have the values [12, 14, 0, 1, 2, 4]");
 		trace(msg);
 
-		Assert.isTrue(a.remove(3));
-		Assert.isEqual(3, a.getIntegerArrayLength());
+		\\Assert.isTrue(a.remove(3));
+		\\Assert.isEqual(3, a.getIntegerArrayLength());
 		msg = "";
 		for(i in a)
 			msg += i + " ";
 		trace("The following line should have the values [12, 14, 0, 1, 2]");
 		trace(msg);
 
-		Assert.isTrue(a.remove("horse"));
-		Assert.isEqual(3, a.getIntegerArrayLength());
+		\\Assert.isTrue(a.remove("horse"));
+		\\Assert.isEqual(3, a.getIntegerArrayLength());
 		msg = "";
 		for(i in a)
 			msg += i + " ";
 		trace("The following line should have the values [14, 0, 1, 2]");
 		trace(msg);
 
-		Assert.isFalse(a.remove("pony"));
-		Assert.isFalse(a.remove(4));
+		\\Assert.isFalse(a.remove("pony"));
+		\\Assert.isFalse(a.remove(4));
 
 		a.set("pony", null);
-		Assert.isEqual(null, a.get("pony"));
+		\\Assert.isEqual(null, a.get("pony"));
 		a.push(null);
-		Assert.isEqual(null, a.get(a.getIntegerArrayLength()-1));
+		\\Assert.isEqual(null, a.get(a.getIntegerArrayLength()-1));
 	}
 	#end
 }

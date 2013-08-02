@@ -25,8 +25,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import haxe.io.Bytes;
-import haxe.io.BytesBuffer;
+import I32;
 
 class BytesUtil {
 	/** static 0 length Bytes object **/
@@ -65,6 +64,24 @@ class BytesUtil {
 		return StringTools.hex(b,2).toLowerCase();
 	}
 
+	/**
+		Return a hex representation of the byte b. If
+		b > 255 only the lowest 8 bits are used.
+	**/
+	public static function byte32ToHex(b : Int32) {
+		var bs : Int = I32.toInt(I32.and(b, I32.ofInt(0xFF)));
+		return StringTools.hex(bs,2).toLowerCase();
+	}
+
+	/**
+		Convert a string containing little endian encoded 32bit integers to an array of int32s<br />
+		If the string length is not a multiple of 4, it will be 0 padded
+		at the end.
+	**/
+	public static function bytesToInt32LE(s : Bytes) : Array<Int32>
+	{
+		return I32.unpackLE(nullPad(s,4));
+	}
 
 	/**
 	* Cleans out all whitespace and colons from input hex strings, returning
@@ -109,7 +126,7 @@ class BytesUtil {
 	**/
 	public static function encodeToBase(buf:Bytes,base:String) : Bytes
 	{
-		var bc = new haxe.crypto.BaseCode( Bytes.ofString(base) );
+		var bc = new haxe.BaseCode( Bytes.ofString(base) );
 		return bc.encodeBytes(buf);
 	}
 
@@ -136,6 +153,33 @@ class BytesUtil {
 		return toHex(b, separator);
 	}
 
+	/*
+		Convert an array of 32bit integers to a little endian Bytes<br />
+	**/
+	public static inline function int32ToBytesLE(l : Array<Int32>) : Bytes
+	{
+		return I32.packLE(l);
+	}
+
+	/**
+		Transform an array of integers x where 0xFF >= x >= 0 to
+		a string of binary data, optionally padded to a multiple of
+		padToBytes. 0 length input returns 0 length output, not
+		padded.
+	**/
+	public static function int32ArrayToBytes(a: Array<Int32>, ?padToBytes:Int) : Bytes  {
+		var sb = new BytesBuffer();
+		for(v in a) {
+			var i = I32.toInt(v);
+			if(i > 0xFF || i < 0)
+				throw "Value out of range";
+			sb.addByte(i);
+		}
+		if(padToBytes != null && padToBytes > 0) {
+			return nullPad(sb.getBytes(), padToBytes);
+		}
+		return sb.getBytes();
+	}
 
 	/**
 		Transform an array of integers x where 0xFF >= x >= 0 to

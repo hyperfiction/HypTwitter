@@ -3,7 +3,7 @@ package fr.hyperfiction.twitter;
 import fr.hyperfiction.twitter.HypTwitter;
 import fr.hyperfiction.utils.URLVarsParser;
 
-import nme.net.URLVariables;
+import flash.net.URLVariables;
 
 /**
  * ...
@@ -17,7 +17,7 @@ class TwitterConnectProtocol{
 	private var _fAskPin			: Void->Void;
 	private var _fConnected			: Void->Void;
 	private var _fOnError			: String->Void;
-	private var _hTemp				: Hash<String>;
+	private var _hTemp				: Map<String,String>;
 	private var _oTwitter_instance	: HypTwitter;
 	private var _sAuthToken			: String;
 
@@ -36,7 +36,7 @@ class TwitterConnectProtocol{
 			_fAskPin	= fAskPin;
 			_fConnected	= onConnected;
 			_fOnError	= onError;
-			_hTemp		= new Hash<String>( );
+			_hTemp		= new Map<String,String>( );
 		}
 
 	// -------o public
@@ -90,8 +90,7 @@ class TwitterConnectProtocol{
 				#end
 
 			#else
-
-				_oTwitter_instance.call( REQUEST_TOKEN( "oob" ) );
+				_oTwitter_instance.call( REQUEST_TOKEN( "http://localhost/sign-in-with-twitter/" ) );
 			#end
 		}
 
@@ -134,13 +133,13 @@ class TwitterConnectProtocol{
 
 			#if android
 
-				nme.Lib.getURL( new nme.net.URLRequest( AUTHENTIFICATE+sAuth_token ) );
+				flash.Lib.getURL( new flash.net.URLRequest( AUTHENTIFICATE+sAuth_token ) );
 				HypTwitter_set_callback( _onIntent );
 
 			#else
 
 				//For non-mobile device we ask the PIN
-				nme.Lib.getURL( new nme.net.URLRequest( AUTHENTIFICATE+sAuth_token ) );
+				flash.Lib.getURL( new flash.net.URLRequest( AUTHENTIFICATE+sAuth_token ) );
 				_fAskPin( );
 
 			#end

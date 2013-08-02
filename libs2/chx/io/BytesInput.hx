@@ -29,7 +29,7 @@ import chx.lang.OutsideBoundsException;
 import chx.lang.OverflowException;
 
 class BytesInput extends Input {
-	public var position(getPosition, setPosition) : Int;
+	public var position(get, set) : Int;
 	var b : chx.io.BytesData;
 	#if !flash9
 	var pos : Int;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, The Caffeine-hx project contributors
+ * Copyright (c) 2008-2009, The Caffeine-hx project contributors
  * Original author : Russell Weir
  * Contributors:
  * All rights reserved.
@@ -25,34 +25,7 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package chx.crypt.mode;
+package chx.lang;
 
-import chx.io.Output;
-
-class ECB extends ModeBase, implements chx.crypt.IMode {
-
-	override public function toString() {
-		return "ecb";
-	}
-
-	override public function updateEncrypt( b : Bytes, out : Output) : Int {
-		var n = blockSize;
-		if(b.length != n)
-			return 0;
-		var enc = cipher.encryptBlock(b);
-		Assert.isEqual(n, enc.length);
-		out.writeBytes(enc, 0, n);
-		return n;
-	}
-
-	override public function updateDecrypt( b : Bytes, out : Output ) : Int {
-		var n = blockSize;
-		if(b.length != n)
-			return 0;
-		var dec = cipher.decryptBlock(b);
-		Assert.isEqual(n, dec.length);
-		out.writeBytes(dec, 0, n);
-		return n;
-	}
-
+class OutsideBoundsException extends Exception {
 }

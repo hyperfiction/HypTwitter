@@ -3,14 +3,14 @@ package fr.hyperfiction.twitter;
 import fr.hyperfiction.twitter.TwitterConnectProtocol;
 import fr.hyperfiction.oauth.OAuth;
 
-import nme.events.Event;
-import nme.events.IOErrorEvent;
-import nme.events.SecurityErrorEvent;
-import nme.net.URLLoader;
-import nme.net.URLRequest;
-import nme.net.URLVariables;
-import nme.net.URLRequestHeader;
-import nme.net.URLRequestMethod;
+import flash.events.Event;
+import flash.events.IOErrorEvent;
+import flash.events.SecurityErrorEvent;
+import flash.net.URLLoader;
+import flash.net.URLRequest;
+import flash.net.URLVariables;
+import flash.net.URLRequestHeader;
+import flash.net.URLRequestMethod;
 
 
 /**
@@ -34,11 +34,11 @@ class HypTwitter extends OAuth{
 	public static inline var TWEET_UPDATE		: String = "/1.1/statuses/update.json";
 
 	// -------o constructor
-		
+
 		/**
 		* constructor
 		*
-		* @param	
+		* @param
 		* @return	void
 		*/
 		public function new() {
@@ -46,12 +46,12 @@ class HypTwitter extends OAuth{
 			baseURL	= "https://api.twitter.com";
 			_init( );
 		}
-	
+
 	// -------o public
-				
+
 		/**
-		* 
-		* 
+		*
+		*
 		* @public
 		* @return	void
 		*/
@@ -62,7 +62,7 @@ class HypTwitter extends OAuth{
 			//Reset tokens
 				token		= "";
 				tokenSecret	= "";
-			
+
 			//Connection protocol
 			if( _oProtocol_connect == null )
 				_oProtocol_connect = new TwitterConnectProtocol( fOnConnect , fOnError , fAskPin );
@@ -72,8 +72,8 @@ class HypTwitter extends OAuth{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @public
 		* @return	void
 		*/
@@ -87,7 +87,7 @@ class HypTwitter extends OAuth{
 				case REQUEST( m , sURL , pReqParams , pBodyParams ):
 					_call( m , sURL , pReqParams , pBodyParams );
 
-				case REQUEST_TOKEN( sCallBack_url ):					
+				case REQUEST_TOKEN( sCallBack_url ):
 					_call( POST , "/oauth/request_token" , new Params( "oauth_callback" , sCallBack_url), null , false );
 
 				case ACCESS_TOKEN( sToken , sVerifier ):
@@ -100,25 +100,25 @@ class HypTwitter extends OAuth{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @public
 		* @return	void
 		*/
 		public function verify( ) : Void {
-						
+
 		}
 
 	// -------o protected
-		
+
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
 		private function _init( ) : Void{
-			
+
 			_urlLoader = new URLLoader( );
 			_urlLoader.addEventListener( Event.COMPLETE , _onLoader_complete );
 			_urlLoader.addEventListener( IOErrorEvent.IO_ERROR, _onLoader_ioError );
@@ -126,8 +126,8 @@ class HypTwitter extends OAuth{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -140,7 +140,7 @@ class HypTwitter extends OAuth{
 				req.method			= method == POST ? URLRequestMethod.POST : URLRequestMethod.GET;
 				#if !display
 				req.requestHeaders	= [ new URLRequestHeader("Authorization",sSignedReq) ];
-				#end 
+				#end
 			if( pRequest != null && b )
 				req.url += "?"+pRequest.toString( );
 
@@ -151,8 +151,8 @@ class HypTwitter extends OAuth{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -162,8 +162,8 @@ class HypTwitter extends OAuth{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -174,8 +174,8 @@ class HypTwitter extends OAuth{
 		}
 
 		/**
-		* 
-		* 
+		*
+		*
 		* @private
 		* @return	void
 		*/
@@ -184,7 +184,7 @@ class HypTwitter extends OAuth{
 		}
 
 	// -------o misc
-	
+
 }
 
 enum TwitterRequests{

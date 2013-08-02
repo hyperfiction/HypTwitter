@@ -283,7 +283,7 @@ class X509Certificate {
 		var b : Bytes = (Std.is(_param, String)) ? PEM.readCertIntoBytes(cast _param) :_param;
 		if(hash == "md5") {
 			return chx.hash.Md5.encode(b);
-		} 
+		}
 		return(chx.hash.Sha1.encode(b));
 		#end
 	}
@@ -363,7 +363,7 @@ class X509Certificate {
 			if(ms.length == 1)
 				ms = "0" + ms;
 			s = y + "-" + ms + "-" + d + " " + t;
-			
+
 		}
 		//YYYY-MM-DD hh:mm:ss
 		return Date.fromString(s);
@@ -397,10 +397,10 @@ class X509Certificate {
 		if (_loaded) return;
 		#if useOpenSSL
 		handle = x509_from_bytes(_param);
-		Assert.isNotNull(handle);
+		\\Assert.isNotNull(handle);
 		/*
 		var o = x509_parse(handle,true);
-		//Assert.isNotNull(o);
+		//\\Assert.isNotNull(o);
 		trace(Std.string(o));
 		throw "Ok?";
 		*/

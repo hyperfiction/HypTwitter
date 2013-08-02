@@ -33,54 +33,13 @@ import haxe.macro.Context;
  * flag is used on the haxe compiler command line.
  **/
 class Assert {
-	/**
-	* Asserts that expected is equal to actual
-	* @param expected Any expression that can test against actual
-	* @param actual Any expression that can test againt expected
-	**/
-	@:macro public static function isEqual( expected : Expr, actual : Expr ) : Expr {
-		if(!Context.defined("debug"))
-			return { expr : EBlock(new Array()), pos : Context.currentPos() };
-		var pos = Context.currentPos();
-		return
-		{ expr : EIf(
-			{ expr : EBinop(
-				OpNotEq,
-				expected,
-				actual),
-			pos : pos},
-			{ expr : EThrow(
-				{ expr : ENew(
-					{
-						sub : null,
-						name : "FatalException",
-						pack : ["chx", "lang"],
-						params : []
-					},
-					[
-						{ expr : EBinop(OpAdd,
-							{ expr : EConst(CString("Assertion failed. Expected ")), pos : pos },
-							{ expr : EBinop(
-								OpAdd,
-								{ expr : ECall({ expr : EField({ expr : EConst(CType("Std")), pos : pos },"string"),pos : pos },[expected]), pos : pos },
-								{ expr : EBinop(OpAdd, { expr : EConst(CString(". Got ")), pos : pos }, { expr : ECall({ expr : EField({ expr : EConst(CType("Std")), pos : pos },"string"), pos : pos },[actual]), pos : pos }), pos:pos}
-								),
-							pos : pos
-							}),
-						pos : pos
-						}
-					]),
-				pos : pos }),
-			pos : pos },
-			null),
-		pos : pos };
-	}
+	
 
 	/**
 	* Asserts that expr evaluates to true
 	* @param expr An expression that evaluates to a Bool
 	**/
-	@:macro public static function isTrue( expr:Expr ) : Expr {
+	macro public static function isTrue( expr:Expr ) : Expr {
 		if(!Context.defined("debug"))
 			return { expr : EBlock(new Array()), pos : Context.currentPos() };
 		var pos = Context.currentPos();
@@ -112,7 +71,7 @@ class Assert {
 	* Asserts that expr evaluates to false
 	* @param expr An expression that evaluates to a Bool
 	**/
-	@:macro public static function isFalse( expr:Expr ) : Expr {
+	macro public static function isFalse( expr:Expr ) : Expr {
 		if(!Context.defined("debug"))
 			return { expr : EBlock(new Array()), pos : Context.currentPos() };
 		var pos = Context.currentPos();
@@ -144,7 +103,7 @@ class Assert {
 	* Checks that the passed expression is not null.
 	* @param expr A string, class or anything that can be tested for null
 	**/
-	@:macro public static function isNotNull( expr:Expr ) : Expr {
+	macro public static function isNotNull( expr:Expr ) : Expr {
 		if(!Context.defined("debug"))
 			return { expr : EBlock(new Array()), pos : Context.currentPos() };
 		var pos = Context.currentPos();

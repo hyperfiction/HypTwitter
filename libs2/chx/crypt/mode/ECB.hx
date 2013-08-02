@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, The Caffeine-hx project contributors
+ * Copyright (c) 2012, The Caffeine-hx project contributors
  * Original author : Russell Weir
  * Contributors:
  * All rights reserved.
@@ -25,60 +25,34 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * Haxe code platforms adapted from SHA1 Javascript implementation
- * adapted from code covered by the LGPL © 2002-2005 Chris Veness,
- * http://www.movable-type.co.uk/scripts/sha1.html
- *
- * Alternative BSD implementation: http://pajhome.org.uk/crypt/md5/sha1src.html
-*/
+package chx.crypt.mode;
 
-package chx.hash;
+import chx.io.Output;
 
-import haxe.io.Bytes;
-import haxe.io.BytesBuffer;
+class ECB extends ModeBase, implements chx.crypt.IMode {
 
-import BytesUtil;
-
-class Sha1 implements IHash {
-
-    public function new() {
+	override public function toString() {
+		return "ecb";
 	}
 
-	public function dispose() : Void {
+	override public function updateEncrypt( b : Bytes, out : Output) : Int {
+		var n = blockSize;
+		if(b.length != n)
+			return 0;
+		var enc = cipher.encryptBlock(b);
+		\\Assert.isEqual(n, enc.length);
+		out.writeBytes(enc, 0, n);
+		return n;
 	}
 
-	public function toString() : String {
-		return "sha1";
-	}
-
-	public function calculate( msg:Bytes ) : Bytes {
-		return encode(msg);
-	}
-
-	public function calcHex( msg:Bytes ) : String {
-		return encode(msg).toHex();
-	}
-
-	public function getLengthBytes() : Int {
-		return 20;
-	}
-
-	public function getLengthBits() : Int {
-		return 160;
-	}
-
-	public function getBlockSizeBytes() : Int {
-		return 64;
-	}
-
-	public function getBlockSizeBits() : Int {
-		return 512;
-	}
-
-
-	public function encode(msg:Bytes) : Bytes {
-	    return Bytes.ofString(haxe.crypto.Sha1.encode( msg.readString(0,msg.length)));
+	override public function updateDecrypt( b : Bytes, out : Output ) : Int {
+		var n = blockSize;
+		if(b.length != n)
+			return 0;
+		var dec = cipher.decryptBlock(b);
+		\\Assert.isEqual(n, dec.length);
+		out.writeBytes(dec, 0, n);
+		return n;
 	}
 
 }
