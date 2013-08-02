@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008, The Caffeine-hx project contributors
+ * Copyright (c) 2008-2009, The Caffeine-hx project contributors
  * Original author : Russell Weir
  * Contributors:
  * All rights reserved.
@@ -25,46 +25,8 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package chx.hash;
+package chx.lang;
 
-interface IHash {
-	/**
-		Returns the hex string hash value
-	**/
-	function calculate( msg:Bytes ) : Bytes;
-
-	/**
-		Return the binary hash value
-	**/
-	function calcHex( msg:Bytes ) : String;
-
-	/**
-		Returns the length of the hash in bytes
-	**/
-	function getLengthBytes() : Int;
-
-	/**
-		Returns the length of the hash in bits
-	**/
-	function getLengthBits() : Int;
-
-	/**
-		Return the hashing block size in bytes
-	**/
-	function getBlockSizeBytes() : Int;
-
-	/**
-		Return the hashing block size in bits
-	**/
-	function getBlockSizeBits() : Int;
-
-	/**
-	 * Dispose of private data. Hash is unusable after.
-	 **/
-	function dispose() : Void;
-
-	/**
-		Just to enforce method.
-	**/
-	function toString() : String;
+class IOException extends Exception {
 }
+

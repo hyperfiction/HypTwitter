@@ -87,6 +87,3 @@ class Util {
   		return sb.toString();
 	}
 }
-
-
-

@@ -27,6 +27,10 @@
 
 package chx.hash;
 
+import haxe.io.Bytes;
+import haxe.io.BytesBuffer;
+
+
 /**
 	Keyed Hash Message Authentication Codes<br />
 	<a href='http://en.wikipedia.org/wiki/Hmac'>Wikipedia entry</a>
@@ -34,6 +38,7 @@ package chx.hash;
 class HMAC {
 	var hash : IHash;
 	var bits : Int;
+
 
 	/**
 	 * Construct a new hmac using the provided hashing method.
@@ -44,12 +49,13 @@ class HMAC {
 	public function new(hashMethod : IHash, bits : Null<Int>=0) {
 		this.hash = hashMethod;
 		var hb = hashMethod.getLengthBits();
-		if(bits == 0) {
-			bits = hb;
-		}
-		else if(bits > hb){
-			bits = hb;
-		}
+        if(bits == 0) {
+        	bits = hb;
+        }
+        else if(bits > hb){
+        	bits = hb;
+        }
+
 		if(bits <= 0) {
 			throw "Invalid HMAC length";
 		}
@@ -75,6 +81,7 @@ class HMAC {
 			K = hash.calculate(K);
 		}
 		K = BytesUtil.nullPad(K, B);
+		// Assert.isEqual(K.length, B);
 
 		var Ki = new BytesBuffer();
 		var Ko = new BytesBuffer();

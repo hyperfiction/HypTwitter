@@ -4,7 +4,6 @@ import chx.hash.HMAC;
 import chx.hash.Sha1;
 import haxe.crypto.BaseCode;
 import haxe.Http;
-import haxe.io.Bytes;
 import flash.events.Event;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
@@ -144,7 +143,7 @@ class OAuth{
 				var sParams_and_args = sParams.substr( 0 );
 				if( aBodyParams != null )
 					sParams_and_args += "&"+aBodyParams.toString( );
-
+				trace( sParams_and_args );
 
 			//
 				var sSign = Std.string( method )+"&";
@@ -163,7 +162,7 @@ class OAuth{
 			//Key
 				var sKey = uriEncode( consumerSecret ) + "&"+uriEncode( tokenSecret );
 				trace("sKey ::: "+sKey);
-				var hashed : haxe.io.Bytes = _encoder.calculate( haxe.io.Bytes.ofString( sKey ) , haxe.io.Bytes.ofString( sSign ) );
+				var hashed = _encoder.calculate( Bytes.ofString( sKey ) , Bytes.ofString( sSign ) );
 				trace( hashed.toString( ) );
 				var signature = encode( hashed );
 				trace( signature );
@@ -256,7 +255,7 @@ class OAuth{
 		* @return	void
 		*/
 		private function _generateNonce_string( ) : String{
-			return "kYjzVBB8Y0ZFabxSWbWovY3uYSQ2pTgmZeNu2VS4cg";
+			//return "ea9ec8429b68d6b77cd5600adbbb0456";
 			var res : String = "";
 			for( i in 0...20 )
 				res += NONCE_CHARS[ Std.int( Math.random( ) * NONCE_CHARS.length ) ];
@@ -270,8 +269,8 @@ class OAuth{
 		* @private
 		* @return	void
 		*/
-		private function _getTimestamp( ) : String{
-			return "1318622958";
+		private function _getTimestamp( ) : String {
+			//return "1318467427";
 			return Std.int( Date.now( ).getTime( ) / 1000 )+"";
 		}
 
@@ -292,7 +291,7 @@ class OAuth{
 		* @param bytes Buffer to encode
 		* @return Base64 encoded string
 		**/
-		inline private static function encode(bytes : haxe.io.Bytes) : String {
+		inline private static function encode(bytes : Bytes) : String {
 			var ext : String = switch (bytes.length % 3) {
 			case 1: "==";
 			case 2: "=";
@@ -300,7 +299,7 @@ class OAuth{
 			case _:"";
 			}
 			var enc = new BaseCode( haxe.io.Bytes.ofString(Constants.DIGITS_BASE64));
-			return enc.encodeBytes(bytes).toString() + ext;
+			return enc.encodeBytes( haxe.io.Bytes.ofData( bytes.getData( ))).toString() + ext;
 		}
 
 	// -------o misc

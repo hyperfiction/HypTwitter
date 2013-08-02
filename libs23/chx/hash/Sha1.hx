@@ -25,68 +25,60 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*
+ * Haxe code platforms adapted from SHA1 Javascript implementation
+ * adapted from code covered by the LGPL © 2002-2005 Chris Veness,
+ * http://www.movable-type.co.uk/scripts/sha1.html
+ *
+ * Alternative BSD implementation: http://pajhome.org.uk/crypt/md5/sha1src.html
+*/
+
 package chx.hash;
 
-#if neko
-import haxe.Int32;
-#end
+import haxe.io.Bytes;
+import haxe.io.BytesBuffer;
 
-class Util {
-	/**
-	**/
-	public static function safeAdd(x, y) {
-#if !neko
-		var lsw = (x & 0xFFFF) + (y & 0xFFFF);
-		var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-		return (msw << 16) | (lsw & 0xFFFF);
-#else
-		var mask = Int32.ofInt(0xFFFF);
-		var lsw = Int32.add(Int32.and(x, mask), Int32.and(y, mask));
-		var msw = Int32.add(
-				Int32.add(Int32.shr(x, 16), Int32.shr(y, 16)),
-				Int32.shr(lsw, 16));
-		return Int32.or(Int32.shl(msw, 16), Int32.and(lsw, mask));
-#end
+import BytesUtil;
+
+class Sha1 implements IHash {
+
+    public function new() {
 	}
 
-	/**
-		String to big endian binary
-		charSize must be 8 or 16 (Unicode)
-	**/
-	public static function str2binb(str:String, ?charSize:Int) : Array<Int> {
-		if(charSize == null)
-			charSize = 8;
-		if(charSize != 8 && charSize != 16)
-			throw "Invalid character size";
-		var bin = new Array();
-		var mask = (1 << charSize) - 1;
-		var i : Int = 0;
-		var max : Int = str.length * charSize;
-		while(i < max) {
-			bin[i>>5] |= (str.charCodeAt(Std.int(i / charSize)) & mask) << (24 - i%32);
-			i += charSize;
-		}
-		return bin;
+	public function dispose() : Void {
 	}
 
-	public static function binb2hex(binarray:Array<Int>) : String {
-  		var hex_tab = Constants.DIGITS_HEXL;
-		var sb = new StringBuf();
-		for (i in 0...binarray.length * 4) {
-			sb.add(
-				hex_tab.charAt(
-					(binarray[i>>2] >> ((3 - i%4)*8+4)) & 0xF
-				)
-			);
-			sb.add(
-				hex_tab.charAt(
-					(binarray[i>>2] >> ((3 - i%4)*8  )) & 0xF
-				)
-			);
-  		}
-  		return sb.toString();
+	public function toString() : String {
+		return "sha1";
 	}
+
+	public function calculate( msg:Bytes ) : Bytes {
+		return encode(msg);
+	}
+
+	public function calcHex( msg:Bytes ) : String {
+		return encode(msg).toHex();
+	}
+
+	public function getLengthBytes() : Int {
+		return 20;
+	}
+
+	public function getLengthBits() : Int {
+		return 160;
+	}
+
+	public function getBlockSizeBytes() : Int {
+		return 64;
+	}
+
+	public function getBlockSizeBits() : Int {
+		return 512;
+	}
+
+
+	public function encode(msg:Bytes) : Bytes {
+	    return Bytes.ofString(haxe.crypto.Sha1.encode( msg.readString(0,msg.length)));
+	}
+
 }
-
-
-
